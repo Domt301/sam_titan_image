@@ -28,6 +28,29 @@ Resources:
     Metadata:
       BuildMethod: python3.12
       BuildArchitecture: x86_64
+  AmazonBedrockFunctionTwo:
+    Type: AWS::Serverless::Function # More info about Function Resource:
+    Properties:
+      CodeUri: bedrock2/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Architectures:
+      - x86_64 
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: 
+                - "bedrock:InvokeModel"
+              Resource: "*"      
+      Layers:
+        - !Ref Boto3Layer      
+      Events:
+        AmazonBedrock:
+          Type: Api # More info about API Event Source:
+          Properties:
+            Path: /bedrock2
+            Method: get
   AmazonBedrockFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -59,6 +82,12 @@ Outputs:
   AmazonBedrockApi:
     Description: API Gateway endpoint URL for Prod stage for the Amazon Bedrock function
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/bedrock/"
+  AmazonBedrockApiTwo:
+    Description: API Gateway endpoint URL for Prod stage for the Amazon Bedrock function
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/bedrock2/"
+  AmazonBedrockFunctionTwo:
+    Description: Amazon Bedrock Lambda Function ARN
+    Value: !GetAtt AmazonBedrockFunctionTwo.Arn
   AmazonBedrockFunction:
     Description: Amazon Bedrock Lambda Function ARN
     Value: !GetAtt AmazonBedrockFunction.Arn
