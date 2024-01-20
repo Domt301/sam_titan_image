@@ -10,31 +10,43 @@ bedrock_runtime_client = boto3.client('bedrock-runtime', region_name='us-east-1'
 
  
 def lambda_handler(event, context):
-
-    if "queryStringParameters" not in event:
-        return  {
-        'statusCode': 400,
-        'body': 'No query string parameters passed in'
+    # Check if there is a body in the event
+    if 'body' not in event or not event['body']:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('No body provided')
         }
 
-    if "prompt" not in event["queryStringParameters"]:
-        return  {
-        'statusCode': 400,
-        'body': 'Prompt needs to be passed in the query string parameters'
+    # Parse the body
+    try:
+        body = json.loads(event['body'])
+    except json.JSONDecodeError:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('Invalid JSON in body')
         }
 
-    query_string_parameters = event["queryStringParameters"]
-    prompt = query_string_parameters["prompt"]
+    # Check if 'prompt' is in the body
+    if 'prompt' not in body:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('Prompt needs to be passed in the body')
+        }
 
-
+    prompt = body['prompt']
     image_data = invoke_titan_image(prompt)
-
-    # return image data array as the response
+    
+    result_array = []
+    for image in image_data:
+        result_array.append({'base64': image})
+    
     return {
         'statusCode': 200,
-        'body': json.dumps(image_data),
+        'body': json.dumps(result_array),
         'headers': {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+             "Access-Control-Allow-Methods": "POST"
         },
     }
 

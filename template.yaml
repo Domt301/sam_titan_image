@@ -7,6 +7,11 @@ Description: >
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
+  Api: 
+    Cors:
+      AllowMethods: "'POST, GET, OPTIONS'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: "'*'"
   Function:
     Timeout: 60
     MemorySize: 512
@@ -50,7 +55,7 @@ Resources:
           Type: Api # More info about API Event Source:
           Properties:
             Path: /bedrock2
-            Method: get
+            Method: post
   AmazonBedrockFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
