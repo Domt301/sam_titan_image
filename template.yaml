@@ -33,6 +33,29 @@ Resources:
     Metadata:
       BuildMethod: python3.12
       BuildArchitecture: x86_64
+  AmazonBedrockChatFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: chat/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Architectures:
+      - x86_64
+      Policies:
+        - Version: '2012-10-17'
+          Statement: 
+            - Effect: Allow
+              Action: 
+                - "bedrock:InvokeModel"
+              Resource: "*"
+      Layers:
+        - !Ref Boto3Layer
+      Events:
+        AmazonBedrock:
+          Type: Api
+          Properties:
+            Path: /bedrockchat
+            Method: Post
   AmazonBedrockFunctionTwo:
     Type: AWS::Serverless::Function # More info about Function Resource:
     Properties:
