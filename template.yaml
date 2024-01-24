@@ -55,7 +55,7 @@ Resources:
           Type: Api
           Properties:
             Path: /bedrockchat
-            Method: Post
+            Method: post
   AmazonBedrockFunctionTwo:
     Type: AWS::Serverless::Function # More info about Function Resource:
     Properties:
