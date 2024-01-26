@@ -113,6 +113,9 @@ Outputs:
   AmazonBedrockApiTwo:
     Description: API Gateway endpoint URL for Prod stage for the Amazon Bedrock function
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/bedrock2/"
+  AmazonBedrockChatApi:
+    Description: API Gateway endpoint URL for Prod stage for the Amazon Bedrock function
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/bedrockchat/"
   AmazonBedrockFunctionTwo:
     Description: Amazon Bedrock Lambda Function ARN
     Value: !GetAtt AmazonBedrockFunctionTwo.Arn
